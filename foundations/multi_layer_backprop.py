@@ -22,7 +22,6 @@ class Solution:
         W2 = np.array(W2)
         y_true = np.array(y_true)
 
-        print(x.shape, W1.shape, W2.shape, y_true.shape)
         z1 = x @ W1.T + b1 
         a1 = np.maximum(0, z1)
         z2 = a1 @ W2.T + b2

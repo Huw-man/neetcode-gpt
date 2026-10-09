@@ -20,7 +20,6 @@ class Solution:
 
         for _ in range(epochs):
             y_hat = X @ w + b
-            # loss = np.mean((y_hat - y)**2)
             dw = (2/n) * (X.T @ (y_hat - y))
             db = 2 * np.mean(y_hat - y) 
             w = w - lr * dw

@@ -14,7 +14,6 @@ class SingleHeadAttention(nn.Module):
         self.value = nn.Linear(embedding_dim, attention_dim, bias=False)
 
         self.attention_dim = attention_dim
-        self.embedding_dim = embedding_dim
 
     def forward(self, embedded: TensorType[float]) -> TensorType[float]:
         # 1. Project input through K, Q, V linear layers
@@ -32,5 +31,6 @@ class SingleHeadAttention(nn.Module):
             mask,
             float("-inf"),
         )
-        attention = torch.softmax(scores, dim=-1) @ V
-        return torch.round(attention, decimals=4)
+        weights = torch.softmax(scores, dim=-1)
+        output = weights @ V
+        return torch.round(output, decimals=4)

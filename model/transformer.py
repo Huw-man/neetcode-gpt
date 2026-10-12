@@ -25,7 +25,8 @@ class TransformerBlock(nn.Module):
         #   x = x + attention(layer_norm_1(x))
         #   x = x + feed_forward(layer_norm_2(x))
         # Return result rounded to 4 decimal places
-        x = embedded + self.attention(self.layer_norm_1(embedded))
+        x = embedded
+        x = x + self.attention(self.layer_norm_1(x))
         x = x + self.ffn(self.layer_norm_2(x))
         return x.round(decimals=4)
 

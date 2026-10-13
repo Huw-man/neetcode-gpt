@@ -21,16 +21,13 @@ class Solution:
                 if (ca, cb) not in freq:
                     freq[(ca, cb)] = 0
                 freq[(ca, cb)] +=1
-            print(freq)
-            top_pair = sorted(freq.items(), key=lambda x: (-x[1], x[0]))[0]
-            print(top_pair)
+            top_pair = min(freq.items(), key=lambda x: (-x[1], x[0]))
             merges.append(list(top_pair[0]))
             merged_token = top_pair[0][0] + top_pair[0][1]
             
 
             next_c = [cc[0]]
             i = 1
-            print(next_c)
             while i < len(cc):
                 ca, cb = next_c[-1], cc[i]
                 if merged_token == ca+cb:
@@ -39,6 +36,5 @@ class Solution:
                 else:
                     next_c.append(cb)
                 i += 1
-            print(next_c)
             cc = next_c
         return merges

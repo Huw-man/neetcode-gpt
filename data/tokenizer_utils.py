@@ -10,12 +10,10 @@ class Solution:
             remainder = str(n)
             while len(remainder) > 0:
                 for v in sorted(vocab, key=lambda x: -int(x)):
-                    # print(remainder, v, remainder[:len(v)])
                     if remainder[:len(v)] == v:
                         nt.append(str(v))
                         remainder = remainder[len(v):]
                         break
-                # print(remainder)
             res.append(nt)
         return res
 

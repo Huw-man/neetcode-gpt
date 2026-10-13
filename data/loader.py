@@ -23,8 +23,6 @@ class Solution:
         X, Y = [], []
         for i in range(batch_size):
             start = start_index[i].item()
-            print(start)
             X.append(data[start:start+context_length])
             Y.append(data[start+1:start+context_length+1])
-        print("hi", X, Y)
         return torch.stack(X), torch.stack(Y)

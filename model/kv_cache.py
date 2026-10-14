@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 from typing import Tuple, Optional
 
+
 class KVCache:
     def __init__(self):
         self.cache_k: Optional[torch.Tensor] = None  # (batch, seq_len, model_dim)
@@ -23,6 +24,7 @@ class KVCache:
         self.cache_k = None
         self.cache_v = None
 
+
 class CachedAttention(nn.Module):
     def __init__(self, model_dim: int):
         super().__init__()
@@ -31,7 +33,9 @@ class CachedAttention(nn.Module):
         self.k_proj = nn.Linear(model_dim, model_dim, bias=False)
         self.v_proj = nn.Linear(model_dim, model_dim, bias=False)
 
-    def forward(self, x: torch.Tensor, kv_cache: Optional[KVCache] = None) -> Tuple[torch.Tensor, KVCache]:
+    def forward(
+        self, x: torch.Tensor, kv_cache: Optional[KVCache] = None
+    ) -> Tuple[torch.Tensor, KVCache]:
         # 1. Project x into Q, K, V using the linear layers
         # 2. If kv_cache is None, create a new KVCache
         # 3. Update the cache with the new K and V
@@ -43,7 +47,7 @@ class CachedAttention(nn.Module):
             self.kvcache = KVCache()
         else:
             self.kvcache = kv_cache
-        
+
         past_len = 0 if self.kvcache.cache_k is None else self.kvcache.cache_k.shape[-2]
 
         q = self.q_proj(x)
@@ -53,8 +57,7 @@ class CachedAttention(nn.Module):
         # k/v: (batch, total_seq_len, model_dim)
         scores = (q @ k.transpose(-2, -1)) / (q.shape[-1] ** 0.5)
         allowed = torch.tril(
-            torch.ones(scores.shape[1], scores.shape[2],
-               dtype=torch.bool, device=x.device),
+            torch.ones(scores.shape[1], scores.shape[2], dtype=torch.bool),
             diagonal=past_len,
         )
         scores = scores.masked_fill(~allowed, float("-inf"))
